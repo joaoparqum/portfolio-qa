@@ -7,7 +7,7 @@ context('Dev Finances Agilizei', () => {
         cy.get('#data-table tbody tr').should('have.length', 0)
     });    
     
-    it('Cadastrar entradas', () => {
+    it.only('Cadastrar entradas', () => {
         //cy.visit('https://devfinances-agilizei.netlify.app/#/');
         // entender o fluxo manualmente
         // mapear os elementos da tela
@@ -29,7 +29,7 @@ context('Dev Finances Agilizei', () => {
     });
 
     // cadastrar saídas
-    it('Cadastrar saídas', () => {
+    it.only('Cadastrar saídas', () => {
         
         //cy.visit('https://devfinance-agilizei.netlify.app/#/');
 
@@ -45,6 +45,27 @@ context('Dev Finances Agilizei', () => {
 
     });
 
-
     // remover entradas e saídas
+    it('Remover entradas e saídas', () => {
+        
+        const entrada = 'Salário';
+        const saida = 'Presente';
+
+        cy.get('#transaction .button').click()
+        cy.get('#description').type(entrada)
+        cy.get('#amount').type(2500)
+        cy.get('#date').type('2024-06-10')
+        cy.get('button').contains('Salvar').click()
+
+        cy.get('#transaction .button').click()
+        cy.get('#description').type(saida)
+        cy.get('#amount').type(2500)
+        cy.get('#date').type('2024-06-10')
+        cy.get('button').contains('Salvar').click()
+
+        //voltar para o elemento pai e avançar para um td img com o onclick remove
+        cy.contains(entrada)
+            .parent().find('img[onclick*=remove]').click()
+
+    });
 });
