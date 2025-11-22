@@ -7,7 +7,7 @@ context('Dev Finances Agilizei', () => {
         cy.get('#data-table tbody tr').should('have.length', 0)
     });    
     
-    it.only('Cadastrar entradas', () => {
+    it('Cadastrar entradas', () => {
         //cy.visit('https://devfinances-agilizei.netlify.app/#/');
         // entender o fluxo manualmente
         // mapear os elementos da tela
@@ -29,7 +29,7 @@ context('Dev Finances Agilizei', () => {
     });
 
     // cadastrar saídas
-    it.only('Cadastrar saídas', () => {
+    it('Cadastrar saídas', () => {
         
         //cy.visit('https://devfinance-agilizei.netlify.app/#/');
 
@@ -68,4 +68,30 @@ context('Dev Finances Agilizei', () => {
             .parent().find('img[onclick*=remove]').click()
 
     });
+
+    it.only('Validar saldo com diversas transações', () => {
+
+        const entrada = 'Salário';
+        const saida = 'Presente';
+
+        cy.get('#transaction .button').click()
+        cy.get('#description').type(entrada)
+        cy.get('#amount').type(2500)
+        cy.get('#date').type('2024-06-10')
+        cy.get('button').contains('Salvar').click()
+
+        cy.get('#transaction .button').click()
+        cy.get('#description').type(saida)
+        cy.get('#amount').type(-500)
+        cy.get('#date').type('2024-06-10')
+        cy.get('button').contains('Salvar').click()
+
+        cy.get('#data-table tbody tr')
+            .each(($el, index, $list) => {
+                cy.get($el).find('td.income, td.expense')
+                    .invoke('text').then(text => {
+                        cy.log(text);
+                     })       
+            });
+        });        
 });
